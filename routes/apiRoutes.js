@@ -31,8 +31,8 @@ Workout.findByIdAndUpdate( req.params.id,
 //get last workout
 router.get("/api/workouts", (req, res) => {
   Workout.find({})
-    .sort({ date: -1 })
-    .limit(1)
+    // .sort({ "day": -1 })
+    // .limit(1)
     .then(dbWorkouts => {
       res.json(dbWorkouts);
     })
@@ -44,7 +44,7 @@ router.get("/api/workouts", (req, res) => {
 //get workouts in range??
 router.get("/api/workouts/range", (req, res) => {
     Workout.find({})
-        .sort( { date: -1 })
+        .sort({"day": 1})
         .limit(5)
         .then(dbWorkouts => {
             res.json(dbWorkouts);
@@ -52,7 +52,6 @@ router.get("/api/workouts/range", (req, res) => {
         .catch(err => {
             res.status(400).json(err);
         });
-
 });
 
 module.exports = router;

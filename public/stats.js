@@ -44,27 +44,21 @@ function populateChart(data) {
   let pie = document.querySelector("#canvas3").getContext("2d");
   let pie2 = document.querySelector("#canvas4").getContext("2d");
 
+  console.log(data);
+
   let lineChart = new Chart(line, {
     type: "line",
     data: {
-      labels: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
-      ],
+      labels: durations.map((d) => d.day),
       datasets: [
         {
           label: "Workout Duration In Minutes",
           backgroundColor: "red",
           borderColor: "red",
-          data: durations,
-          fill: false
-        }
-      ]
+          data: durations.map((d) => d.duration),
+          fill: false,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -190,11 +184,18 @@ function duration(data) {
   let durations = [];
 
   data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      durations.push(exercise.duration);
+    const duration = workout.exercises
+      .map((exercise) => exercise.duration)
+      .reduce((acc, cv) => acc + cv);
+    const parseDate = new Date(Date.parse(workout.day));
+    // getMonth method returns a zero based index which is why 1 was added
+    const month = parseDate.getMonth() + 1;
+    const date = parseDate.getDate();
+    durations.push({
+      day: `${month}-${date}`,
+      duration,
     });
   });
-
   return durations;
 }
 
